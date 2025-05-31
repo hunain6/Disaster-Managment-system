@@ -1,0 +1,119 @@
+-- Persons Table
+CREATE TABLE Persons (
+    Person_ID INT PRIMARY KEY,
+    First_Name VARCHAR(25) NOT NULL,
+    Last_Name VARCHAR(25) NOT NULL,
+    Age INT,
+    Gender VARCHAR(15),
+    Contact VARCHAR(20) UNIQUE,
+    Address VARCHAR(255) NOT NULL
+);
+
+-- Manager Table (Subclass of Persons)
+CREATE TABLE Manager (
+    Person_ID INT PRIMARY KEY,
+    Username VARCHAR(30) NOT NULL UNIQUE,
+    Password VARCHAR(25) NOT NULL UNIQUE
+);
+
+-- Relief Center Branch Table
+CREATE TABLE ReliefCenter_Branch (
+    ReliefCenter_ID INT PRIMARY KEY,
+    Location VARCHAR(50) UNIQUE,
+    Capacity INT,
+    Operating_Hours INT,
+    Contact VARCHAR(25) UNIQUE,
+    Person_ID INT
+);
+
+-- Employee Table (Subclass of Persons)
+CREATE TABLE Employee (
+    Person_ID INT PRIMARY KEY,
+    Branch_ID INT NOT NULL,
+    Job_Title VARCHAR(50) NOT NULL,
+    Salary DECIMAL(10,2),
+    Employment_Type VARCHAR(20) DEFAULT 'Permanent'
+);
+
+-- Victim Table (Subclass of Persons)
+CREATE TABLE Victim (
+    Person_ID INT PRIMARY KEY,
+    Casualty_Status VARCHAR(50),
+    Donation_Needed DECIMAL(10,2)
+);
+
+-- Volunteer Table (Subclass of Persons)
+CREATE TABLE Volunteer (
+    Person_ID INT PRIMARY KEY,
+    Skillset VARCHAR(50) NOT NULL,
+    Availability INT
+);
+
+-- Disaster Table
+CREATE TABLE Disaster (
+    Disaster_ID INT PRIMARY KEY,
+    Description VARCHAR(50) UNIQUE,
+    OccuredDate DATE,
+    Location VARCHAR(50) NOT NULL,
+    Person_ID INT
+);
+
+-- Donations Table
+CREATE TABLE Donations (
+    Donation_ID INT PRIMARY KEY,
+    Donor_Name VARCHAR(25) NOT NULL,
+    Donor_Contact VARCHAR(25) UNIQUE,
+    CurrentDate DATE,
+    Amount INT,
+    ReliefCenter_ID INT
+);
+
+-- Relief Operations Table
+CREATE TABLE Relief_Operations (
+    Operation_ID INT PRIMARY KEY,
+    Description VARCHAR(50) NOT NULL,
+    Main_Goal VARCHAR(25) NOT NULL,
+    ReliefCenter_ID INT
+);
+
+
+
+-- Add foreign key for Manager table referencing Persons (Person_ID)
+
+ALTER TABLE ReliefCenter_Branch
+ADD CONSTRAINT manager_fk FOREIGN KEY (Person_ID) REFERENCES Manager (Person_ID);
+
+-- Add foreign key for Employee table referencing Persons (Person_ID)
+
+ALTER TABLE Employee
+ADD CONSTRAINT employee_person_fk FOREIGN KEY (Person_ID) REFERENCES Persons (Person_ID);
+
+-- Add foreign key for Employee table referencing ReliefCenter_Branch (ReliefCenter_ID)
+
+ALTER TABLE Employee
+ADD CONSTRAINT employee_branch_fk FOREIGN KEY (Branch_ID) REFERENCES ReliefCenter_Branch (ReliefCenter_ID);
+
+-- Add foreign key for Victim table referencing Persons (Person_ID)
+
+ALTER TABLE Victim
+ADD CONSTRAINT victim_person_fk FOREIGN KEY (Person_ID) REFERENCES Persons (Person_ID);
+
+-- Add foreign key for Volunteer table referencing Persons (Person_ID)
+
+ALTER TABLE Volunteer
+ADD CONSTRAINT volunteer_person_fk FOREIGN KEY (Person_ID) REFERENCES Persons (Person_ID);
+
+-- Add foreign key for Disaster table referencing Victim (Person_ID)
+
+ALTER TABLE Disaster
+ADD CONSTRAINT disaster_victim_fk FOREIGN KEY (Person_ID) REFERENCES Victim (Person_ID);
+
+-- Add foreign key for Donations table referencing ReliefCenter_Branch (ReliefCenter_ID)
+
+ALTER TABLE Donations
+ADD CONSTRAINT donations_reliefcenter_fk FOREIGN KEY (ReliefCenter_ID) REFERENCES ReliefCenter_Branch (ReliefCenter_ID);
+
+-- Add foreign key for Relief_Operations table referencing ReliefCenter_Branch (ReliefCenter_ID)
+
+ALTER TABLE Relief_Operations
+ADD CONSTRAINT relief_operations_reliefcenter_fk FOREIGN KEY (ReliefCenter_ID) REFERENCES ReliefCenter_Branch (ReliefCenter_ID);
