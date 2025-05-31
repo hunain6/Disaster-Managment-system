@@ -1,1 +1,4 @@
 # Disaster-Managment-system
+The Disaster Management System is a database-driven project developed to help manage and coordinate relief efforts during natural or man-made disasters. This system provides a centralized way to register and track information about victims, volunteers, employees, managers, donations, disasters, and relief operations. It is designed to streamline the process of managing disaster response by organizing important data in a structured and efficient manner.
+
+The system is built using MySQL for the database and is developed to run on Windows. It includes multiple entities such as Persons, with subclasses for Victims, Volunteers, Employees, and Managers. The database also manages Relief Center branches, Disaster records, Donation details, and Relief Operations. Each table is properly related using foreign keys to maintain referential integrity and support complex queries for effective data retrieval.
